@@ -29,6 +29,8 @@ BufferedInput* BufferedInput_create(File * file, size_t buffer_size) {
 // abort on read error
 int BufferedInput_fgetc(BufferedInput *buffer) {
     assert(buffer != 0);
+    //TODO
+
     
 }
 

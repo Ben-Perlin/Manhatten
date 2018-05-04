@@ -42,21 +42,41 @@ Matrix * readMatrix(FILE * file) {
             break;
 
         case '0':
-
-            break;
-
         case '1':
+            if (seperatorExpected) {
+                // error
+            }
+
+            bool value = (c==1) ? true : false;
+            DataBuffer_append(buffer, &value);
+            seperatorExpected = true;
+
+            ++col;
+            if (row == 0) {
+                ncol = col;
+            } else if (col > ncol){
+                // ERROR misformated data
+            }
 
             break;
 
         case ',':
-
+            if (seperatorExpected) {
+                seperatorExpected = false;
+            } else {
+                // ERROR
+            }
             break;
 
+        // end newline optional
         case '\n':
             if (nrow != 0) {
 
             }
+
+            break;
+
+        case EOF:
 
             break;
 
@@ -81,6 +101,7 @@ Matrix * readMatrix(FILE * file) {
     output->ncol = ncol;
     output->data = outputData;
     return output;
+
 }
 
 int main(char** argv, int argc) {

@@ -43,6 +43,10 @@ Matrix * readMatrix(FILE * file) {
 
         case '0':
         case '1':
+            if (column == 0) {
+                row++; // begin reading row
+            }
+
             if (seperatorExpected) {
                 // error
             }
@@ -55,7 +59,10 @@ Matrix * readMatrix(FILE * file) {
             if (row == 0) {
                 ncol = col;
             } else if (col > ncol){
-                // ERROR misformated data
+                fprintf(stderr, "ERROR: to many columns found on row %d", row);
+                DataBuffer_free(buffer);
+                free(inputBuffer);
+                return null;
             }
 
             break;
@@ -64,26 +71,55 @@ Matrix * readMatrix(FILE * file) {
             if (seperatorExpected) {
                 seperatorExpected = false;
             } else {
-                // ERROR
+                fprintf(stderr, "ERROR on row %d: unexpected seperator found", row);
+                DataBuffer_free(buffer);
+                free(inputBuffer);
+                return null;
             }
             break;
 
         // end newline optional
         case '\n':
-            if (nrow != 0) {
-
+            if (!expectSeperator) {
+                fprintf(stderr, "ERROR on row %d: unexpected seperator found before newline", row);
+                DataBuffer_free(buffer);
+                free(inputBuffer);
+                return null;
             }
+
+            if (ncol == 0) {
+                ncol = col;
+            } else if (col < ncol) {
+                fprintf(stderr, "ERROR: to few columns found on row %d", row);
+                DataBuffer_free(buffer);
+                free(inputBuffer);
+                return null;
+            } else if (col > ncol) {
+                assert(0);
+            }
+
+            col = 0;
 
             break;
 
         case EOF:
+            if (col < ncol) {
+                fprintf(stderr, "ERROR: to few columns found on row %d", row);
+                DataBuffer_free(buffer);
+                free(inputBuffer);
+                return null;
+            } else if (col > ncol) {
+                assert(0);
+            }
 
+            goto exitLoop;
             break;
 
         default:
 
         }
     }
+exitLoop:
 
     bool *outputData = (bool *) DataBuffer_collapse(buffer);
     DataBuffer_free(buffer);

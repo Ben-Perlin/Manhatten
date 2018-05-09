@@ -1,5 +1,10 @@
 /* Command Line interface for mean Manhatten Script */
 
+/* format
+ * chars '0', '1', ',', '\n', ' ', '\t' only
+ * must start on first line, no empty lines, finish with last row and then newline EOF
+ */
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,42 +32,38 @@ Matrix * readMatrix(FILE * file) {
 
     size_t nrow = 0;
     size_t ncol = 0;
-    size_t row = 0;
     size_t col = 0;
 
     bool canStartRow = true;
     bool seperatorExpected = false;
 
+    char * msg = "unspecified error";
+
+    int c = EOF;
     // read from file
-    while ((int c = BufferedInput_fgetc(inputBuffer)) != EOF) {
+    while ((c = BufferedInput_fgetc(inputBuffer)) != EOF) {
         switch (c) {
         case ' ':
         case '\t':
-            // discard
             break;
 
         case '0':
         case '1':
-            if (column == 0) {
-                row++; // begin reading row
-            }
-
             if (seperatorExpected) {
-                // error
+                msg = "Seperator Expected";
+                goto error;
             }
 
-            bool value = (c==1) ? true : false;
+            if (col == 0) {
+                nrow++; // begin reading row
+            }
+            bool value = (c==1);
             DataBuffer_append(buffer, &value);
             seperatorExpected = true;
-
             ++col;
-            if (row == 0) {
+
+            if (nrow == 0) {
                 ncol = col;
-            } else if (col > ncol){
-                fprintf(stderr, "ERROR: to many columns found on row %d", row);
-                DataBuffer_free(buffer);
-                free(inputBuffer);
-                return null;
             }
 
             break;
@@ -71,73 +72,50 @@ Matrix * readMatrix(FILE * file) {
             if (seperatorExpected) {
                 seperatorExpected = false;
             } else {
-                fprintf(stderr, "ERROR on row %d: unexpected seperator found", row);
-                DataBuffer_free(buffer);
-                free(inputBuffer);
-                return null;
+                msg = "unexpected seperator found";
+                goto error;
             }
             break;
 
         // end newline optional
         case '\n':
             if (!expectSeperator) {
-                fprintf(stderr, "ERROR on row %d: unexpected seperator found before newline", row);
-                DataBuffer_free(buffer);
-                free(inputBuffer);
-                return null;
+                msg = "unexpected newline";
+                goto error;
             }
 
-            if (ncol == 0) {
-                ncol = col;
-            } else if (col < ncol) {
-                fprintf(stderr, "ERROR: to few columns found on row %d", row);
-                DataBuffer_free(buffer);
-                free(inputBuffer);
-                return null;
+            expectSeperator = false;
+
+            if (col < ncol) {
+                msg = "too few columns found";
+                goto error;
             } else if (col > ncol) {
-                assert(0);
+                msg = "too many columns found";
+                goto error;
             }
 
             col = 0;
-
             break;
 
-        case EOF:
-            if (col < ncol) {
-                fprintf(stderr, "ERROR: to few columns found on row %d", row);
-                DataBuffer_free(buffer);
-                free(inputBuffer);
-                return null;
-            } else if (col > ncol) {
-                assert(0);
-            }
-
-            goto exitLoop;
-            break;
+        case '\r':
+            break; // drop windows carrage return for consistancy
 
         default:
-
+            msg = "unexpected symbol found";
+            goto error;
         }
     }
-exitLoop:
 
-    bool *outputData = (bool *) DataBuffer_collapse(buffer);
-    DataBuffer_free(buffer);
-    free(inputBuffer);
-
+    bool *outputData = (bool *) DataBuffer_collapse_and_free(buffer);
     if (outputData == NULL) {return NULL;}
 
-    Matrix *output = malloc(sizeof(Matrix));
-    if (output = NULL) {
-        free(outputData);
-        return NULL;
-    }
+    return Matrix_create(nrow, ncol, outputData)
 
-    output->nrow = nrow;
-    output->ncol = ncol;
-    output->data = outputData;
-    return output;
-
+error:
+    fprintf(stderr, "Error parsing matrix (row %ld, col %ld)%s", nrow, col, msg);
+    DataBuffer_free(buffer);
+    free(inputBuffer);
+    return null;
 }
 
 int main(char** argv, int argc) {
@@ -158,7 +136,7 @@ FILE * sourceFile = NULL;
     } else if (isatty(fileno(stdin))) {
         sourceFile = stdin;
     } else {
-        fputs("ERROR: No imput available", stderr)
+        fputs("ERROR: No imput available", stderr);
     }
 
     Matrix *matrix = readMatrix(sourceFile);

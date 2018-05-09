@@ -17,7 +17,7 @@ typedef struct BufferedInput {
     char buffer[];
 } BufferedInput;
 
-BufferedInput* BufferedInput_create(File * file, size_t buffer_size) {
+BufferedInput* BufferedInput_create(FILE * file, size_t buffer_size) {
     BufferedInput *buffer = malloc(offsetof(BufferedInput, buffer) + buffer_size*sizeof(char));
     buffer->file = file;
     buffer->capacity = buffer_size;
@@ -30,12 +30,12 @@ BufferedInput* BufferedInput_create(File * file, size_t buffer_size) {
 
 // drops carrage returns if encountered
 // abort on read error
-int BufferedInput_fgetc(BufferedInput *buffer) {
+int BufferedInput_fgetc(BufferedInput * const buffer) {
     assert(buffer != 0);
     assert(buffer->index <= buffer->length);
 
     if (buffer->index < buffer->length) {
-        return buffer[++buffer->index];
+        return buffer[++(buffer->index)];
 
     } else if (buffer->index == buffer->length) {
         if (buffer->EOF_read) {
@@ -45,12 +45,12 @@ int BufferedInput_fgetc(BufferedInput *buffer) {
             buffer->index = 0;
 
             if (buffer->length < buffer->capacity) {
-                if (ferror()) {
+                if (ferror(buffer->file)) {
                     fputs("ERROR: error reading from input file", stderr);
                     abort(); // TODO implement better error handling
                 }
 
-                if (feof()) {
+                if (feof(buffer->file)) {
                     buffer->EOF_read = true;
                 }
             }

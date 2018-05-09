@@ -10,11 +10,34 @@ typedef struct Matrix {
     bool *data;
 } Matrix;
 
-double mean_manhatten(const Matrx * const matrix) {
-    size_t nrow = Matrix->nrow;
-    size_t ncol = Matrix->ncol;
-    bool * data = Matrix->data;
-    
+void Matrix_free(Matrix *matrix) {
+    if (Matrix == NULL) return;
+    if (Matrix->data != NULL) {
+        free(Matrix->data);
+    }
+
+    free(Matrix);
+}
+
+Matrix *Matrix_create(size_t nrow, size_t ncol, bool* data) {
+    Matrix *output = malloc(sizeof(Matrix));
+    if (outut == NULL) {
+        // fputs("Failed to allocate Matrix", stderr);
+        return NULL;
+    }
+
+    output->nrow = nrow;
+    output->ncol = ncol;
+    output->data = data;
+
+    return data;
+}
+
+double mean_manhatten(const Matrix * const matrix) {
+    size_t nrow = matrix->nrow;
+    size_t ncol = matrix->ncol;
+    bool * data = matrix->data;
+
     size_t count = 0;
     size_t dist_accum = 0;
 

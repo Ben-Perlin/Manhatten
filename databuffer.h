@@ -31,7 +31,7 @@ _DataBufferNode _DataBufferNode_create(size_t datatypeSize, size_t chunkSize) {
 
     if (node == NULL) {return node;}
 
-    node->contents = malloc(chunkSize*datatypeSize);
+    node->contents = malloc(chunkSize * datatypeSize);
     if (node->contents == NULL) {
         free(node);
         return NULL;
@@ -91,7 +91,7 @@ void DataBuffer_free(DataBuffer *buffer) {
 /*
  * return DataBuffer after running, if allocation fails it is deleted
  */
-DataBuffer* DataBuffer_append(DataBuffer *buffer, void *value) {
+DataBuffer* DataBuffer_append(DataBuffer *buffer, const void const *value) {
     assert(buffer != NULL);
     assert(value != NULL);
 
@@ -112,7 +112,7 @@ DataBuffer* DataBuffer_append(DataBuffer *buffer, void *value) {
     return buffer;
 }
 
-size_t dataBuffer_length(DataBuffer *buffer) {
+size_t dataBuffer_length(const DataBuffer *const buffer) {
     assert(buffer != NULL);
 
     size_t length = 0;
@@ -140,5 +140,11 @@ void* DataBuffer_collapse(DataBuffer *buffer) {
         outputDest += node->nEntries * buffer->datatypeSize;
     }
 
+    return output;
+}
+
+void *DataBuffer_collapse_and_free(DataBuffer *buffer) {
+    void *output = DataBuffer_collapse(buffer);
+    DataBuffer_free(buffer);
     return output;
 }

@@ -1,3 +1,7 @@
+
+#ifndef __MEAN_MANHATTEN_H__
+#define __MEAN_MANHATTEN_H__
+
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -11,17 +15,17 @@ typedef struct Matrix {
 } Matrix;
 
 void Matrix_free(Matrix *matrix) {
-    if (Matrix == NULL) return;
-    if (Matrix->data != NULL) {
-        free(Matrix->data);
+    if (matrix == NULL) return;
+    if (matrix->data != NULL) {
+        free(matrix->data);
     }
 
-    free(Matrix);
+    free(matrix);
 }
 
 Matrix *Matrix_create(size_t nrow, size_t ncol, bool* data) {
     Matrix *output = malloc(sizeof(Matrix));
-    if (outut == NULL) {
+    if (output == NULL) {
         // fputs("Failed to allocate Matrix", stderr);
         return NULL;
     }
@@ -30,7 +34,7 @@ Matrix *Matrix_create(size_t nrow, size_t ncol, bool* data) {
     output->ncol = ncol;
     output->data = data;
 
-    return data;
+    return output;
 }
 
 double mean_manhatten(const Matrix * const matrix) {
@@ -70,3 +74,5 @@ double mean_manhatten(const Matrix * const matrix) {
 
     return ((double) dist_accum)/((double) count);
 }
+
+#endif /*__MEAN_MANHATTEN_H__ */

@@ -15,13 +15,13 @@
 #include "databuffer.h"
 #include "mean_manhatten.h"
 
-#define INPUT_BUFFER_SIZE 1024
+#define INPUT_BUFFER_SIZE 1024LL
 
 // starting data buffer size
-#define DATA_BUFFER_CHUNKSIZE (1<<10)
+#define DATA_BUFFER_CHUNKSIZE 1024LL
 
 Matrix * readMatrix(FILE * file) {
-    char *inputBuffer = BufferedInput_create(INPUT_BUFFER_SIZE);
+    BufferedInput * inputBuffer = BufferedInput_create(file, INPUT_BUFFER_SIZE);
     if (inputBuffer == NULL) return NULL;
 
     DataBuffer *buffer = DataBuffer_create(sizeof(bool), DATA_BUFFER_CHUNKSIZE);
@@ -79,12 +79,12 @@ Matrix * readMatrix(FILE * file) {
 
         // end newline optional
         case '\n':
-            if (!expectSeperator) {
+            if (!seperatorExpected) {
                 msg = "unexpected newline";
                 goto error;
             }
 
-            expectSeperator = false;
+            seperatorExpected = false;
 
             if (col < ncol) {
                 msg = "too few columns found";
@@ -109,13 +109,13 @@ Matrix * readMatrix(FILE * file) {
     bool *outputData = (bool *) DataBuffer_collapse_and_free(buffer);
     if (outputData == NULL) {return NULL;}
 
-    return Matrix_create(nrow, ncol, outputData)
+    return Matrix_create(nrow, ncol, outputData);
 
 error:
     fprintf(stderr, "Error parsing matrix (row %ld, col %ld)%s", nrow, col, msg);
     DataBuffer_free(buffer);
     free(inputBuffer);
-    return null;
+    return NULL;
 }
 
 int main(char** argv, int argc) {
@@ -135,6 +135,7 @@ FILE * sourceFile = NULL;
         }
     } else if (isatty(fileno(stdin))) {
         sourceFile = stdin;
+        // TODO FIX ME
     } else {
         fputs("ERROR: No imput available", stderr);
     }

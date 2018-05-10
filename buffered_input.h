@@ -35,13 +35,13 @@ int BufferedInput_fgetc(BufferedInput * const buffer) {
     assert(buffer->index <= buffer->length);
 
     if (buffer->index < buffer->length) {
-        return buffer[++(buffer->index)];
+        return buffer->buffer[++(buffer->index)];
 
     } else if (buffer->index == buffer->length) {
         if (buffer->EOF_read) {
             return EOF;
         } else { // into buffer
-            buffer->length = fread(buffer->buffer, sizeof(char), buffer->buffer, buffer->file);
+            buffer->length = fread(buffer->buffer, sizeof(char), buffer->capacity, buffer->file);
             buffer->index = 0;
 
             if (buffer->length < buffer->capacity) {

@@ -1,19 +1,17 @@
 /*
  */
 
-#ifndef DATABUFFER_H
-#define DATABUFFER_H
+#ifndef __DATABUFFER_H__
+#define __DATABUFFER_H__
 
 #include <assert.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
-//TODO apply const
-
 // or instead read as blocks to linked list and cat
 typedef struct _DataBufferNode {
-    _DataBufferNode *next;
+    struct _DataBufferNode *next;
     size_t nEntries;
     void *contents;
 } _DataBufferNode;
@@ -25,7 +23,7 @@ typedef struct DataBuffer {
     size_t chunkSize;
 } DataBuffer;
 
-_DataBufferNode _DataBufferNode_create(size_t datatypeSize, size_t chunkSize) {
+_DataBufferNode *_DataBufferNode_create(size_t datatypeSize, size_t chunkSize) {
     //REQUIRES(don't overflow size)
     _DataBufferNode *node = calloc(sizeof(_DataBufferNode), 1);
 
@@ -130,7 +128,7 @@ size_t dataBuffer_length(const DataBuffer *const buffer) {
 void* DataBuffer_collapse(DataBuffer *buffer) {
     assert(buffer != 0);
 
-    void *output = malloc(dataBufferLength(buffer) * buffer->datatypeSize);
+    void *output = malloc(dataBuffer_length(buffer) * buffer->datatypeSize);
     if (output == NULL) {return NULL;}
 
     void *outputDest = output;
@@ -148,3 +146,5 @@ void *DataBuffer_collapse_and_free(DataBuffer *buffer) {
     DataBuffer_free(buffer);
     return output;
 }
+
+#endif /* __DATABUFFER_H__ */

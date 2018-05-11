@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 // or instead read as blocks to linked list and cat
 typedef struct _DataBufferNode {
@@ -27,12 +28,11 @@ _DataBufferNode *_DataBufferNode_create(size_t datatypeSize, size_t chunkSize) {
     //REQUIRES(don't overflow size)
     _DataBufferNode *node = calloc(sizeof(_DataBufferNode), 1);
 
-    if (node == NULL) {return node;}
+    if (node == NULL) {return NULL;}
 
     node->contents = malloc(chunkSize * datatypeSize);
     if (node->contents == NULL) {
         free(node);
-        return NULL;
     }
 
     return node;
@@ -60,12 +60,12 @@ DataBuffer *DataBuffer_create(size_t datatypeSize, size_t chunkSize) {
     buffer->tail = _DataBufferNode_create(buffer->datatypeSize, buffer->chunkSize);
 
     /* check validity of allocation and clean up if failed */
-    if (buffer->head == 0) {
+    if (buffer->tail == NULL) {
         free(buffer);
         return NULL;
     }
 
-    buffer->tail = buffer->head;
+    buffer->head = buffer->tail;
 
     return buffer;
 }
@@ -104,7 +104,7 @@ DataBuffer* DataBuffer_append(DataBuffer *buffer, const void const *value) {
         buffer->tail = buffer->tail->next;
     }
 
-    memcpy(buffer->tail->contents + (++(buffer->tail->nEntries) * buffer->datatypeSize),
+    memcpy(buffer->tail->contents + ((buffer->tail->nEntries)++ * buffer->datatypeSize),
         value, buffer->datatypeSize);
 
     return buffer;

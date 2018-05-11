@@ -35,7 +35,7 @@ int BufferedInput_fgetc(BufferedInput * const buffer) {
     assert(buffer->index <= buffer->length);
 
     if (buffer->index < buffer->length) {
-        return buffer->buffer[++(buffer->index)];
+        return buffer->buffer[(buffer->index)++];
 
     } else if (buffer->index == buffer->length) {
         if (buffer->EOF_read) {

@@ -1,4 +1,6 @@
 /*
+ * databuffer.h - generic databuffer
+ * Written by Ben Perlin - 2018
  */
 
 #ifndef __DATABUFFER_H__

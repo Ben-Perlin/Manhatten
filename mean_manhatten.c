@@ -1,4 +1,6 @@
-/* Command Line interface for mean Manhatten Script */
+/* Command Line interface for mean Manhatten Script
+ * Written by Ben Perlin - 2018
+ */
 
 /* format
  * chars '0', '1', ',', '\n', ' ', '\t' only

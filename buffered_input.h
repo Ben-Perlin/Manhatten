@@ -1,3 +1,8 @@
+/*
+ * buffered_input.h - buffered version of fgetc
+ * Written by Ben Perlin - 2018
+ */
+
 #ifndef BUFFERED_FGETC_H
 #define BUFFERED_FGETC_H
 

@@ -1,17 +1,14 @@
-/* Command Line interface for mean Manhatten Script
- * Written by Ben Perlin - 2018
- */
+/*********************************************************************
+ * mean_manhatten.c - Command Line interface for program             *
+ * Takes a matrix of '1' and '0' in csv form with single trailing    *
+ *    newline                                                        *
+ * Written by Ben Perlin - 2018                                      *
+ ********************************************************************/
 
-/* format
- * chars '0', '1', ',', '\n', ' ', '\t' only
- * must start on first line, no empty lines, finish with last row and then newline EOF
- */
 
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#include <unistd.h>
 
 #include "buffered_input.h"
 #include "databuffer.h"
@@ -19,7 +16,6 @@
 
 #define INPUT_BUFFER_SIZE 1024LL
 
-// starting data buffer size
 #define DATA_BUFFER_CHUNKSIZE 1024LL
 
 Matrix * readMatrix(FILE * file) {
@@ -38,11 +34,10 @@ Matrix * readMatrix(FILE * file) {
 
     bool canStartRow = true;
     bool seperatorExpected = false;
-
     char * msg = "unspecified error";
-
     int c = EOF;
-    // read from file
+
+    // parse file
     while ((c = BufferedInput_fgetc(inputBuffer)) != EOF) {
         switch (c) {
         case ' ':
@@ -79,7 +74,6 @@ Matrix * readMatrix(FILE * file) {
             }
             break;
 
-        // end newline optional
         case '\n':
             if (!seperatorExpected) {
                 msg = "unexpected newline";
@@ -143,9 +137,10 @@ FILE * sourceFile = NULL;
         fputs("ERROR: failed to parse matrix", stderr);
         return 1;
     }
+
     double mm_val = mean_manhatten(matrix);
     printf("%f\n", mm_val);
-    Matrix_free(matrix);
 
+    Matrix_free(matrix);
     return 0;
 }

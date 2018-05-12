@@ -1,6 +1,7 @@
-/* algorithmic logic to compute mean Manhatten distance of matrix
- * Written by Ben Perlin - 2018
- */
+/*********************************************************************
+ * Algorithmic logic to compute mean Manhatten distance of matrix    *
+ * Written by Ben Perlin - 2018                                      *
+ ********************************************************************/
 
 #ifndef __MEAN_MANHATTEN_H__
 #define __MEAN_MANHATTEN_H__

@@ -1,7 +1,7 @@
-/*
- * databuffer.h - generic databuffer
- * Written by Ben Perlin - 2018
- */
+/*********************************************************************
+ * databuffer.h - generic databuffer                                 *
+ * Written by Ben Perlin - 2018                                      *
+ ********************************************************************/
 
 #ifndef __DATABUFFER_H__
 #define __DATABUFFER_H__
@@ -12,7 +12,6 @@
 #include <string.h>
 #include <stdio.h>
 
-// or instead read as blocks to linked list and cat
 typedef struct _DataBufferNode {
     struct _DataBufferNode *next;
     size_t nEntries;

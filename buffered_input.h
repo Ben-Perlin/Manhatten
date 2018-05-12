@@ -1,10 +1,10 @@
-/*
- * buffered_input.h - buffered version of fgetc
- * Written by Ben Perlin - 2018
- */
+/*********************************************************************
+ * buffered_input.h - buffered version of fgetc                      *
+ * Written by Ben Perlin - 2018                                      *
+ ********************************************************************/
 
-#ifndef BUFFERED_FGETC_H
-#define BUFFERED_FGETC_H
+#ifndef __BUFFERED_FGETC_H__
+#define __BUFFERED_FGETC_H__
 
 #include <assert.h>
 #include <stdbool.h>
@@ -65,4 +65,4 @@ int BufferedInput_fgetc(BufferedInput * const buffer) {
     }
 }
 
-#endif /* BUFFERED_FGETC_H */
+#endif /* __BUFFERED_FGETC_H__ */

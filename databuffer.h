@@ -7,6 +7,7 @@
 #define __DATABUFFER_H__
 
 #include <assert.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>

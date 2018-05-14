@@ -7,6 +7,7 @@
 #define __MEAN_MANHATTEN_H__
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 size_t abs_diff(size_t a, size_t b) {

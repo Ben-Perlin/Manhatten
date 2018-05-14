@@ -33,7 +33,6 @@ Matrix * readMatrix(FILE * file) {
     size_t ncol = 0;
     size_t col = 0;
 
-    bool canStartRow = true;
     bool seperatorExpected = false;
     char * msg = "unspecified error";
     int c = EOF;
@@ -110,7 +109,7 @@ Matrix * readMatrix(FILE * file) {
     return Matrix_create(nrow, ncol, outputData);
 
 error:
-    fprintf(stderr, "Error parsing matrix (row %ld, col %ld)%s\n", nrow, col, msg);
+    fprintf(stderr, "Error parsing matrix (row %zd, col %zd)%s\n", nrow, col, msg);
     DataBuffer_free(buffer);
     free(inputBuffer);
     return NULL;

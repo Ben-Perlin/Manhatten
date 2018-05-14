@@ -63,6 +63,8 @@ int BufferedInput_fgetc(BufferedInput * const buffer) {
             return BufferedInput_fgetc(buffer); // recurse 1 level to try again
         }
     }
+
+    assert(0);
 }
 
 #endif /* __BUFFERED_FGETC_H__ */

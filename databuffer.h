@@ -91,7 +91,7 @@ void DataBuffer_free(DataBuffer *buffer) {
 /*
  * return DataBuffer after running, if allocation fails it is deleted
  */
-DataBuffer* DataBuffer_append(DataBuffer *buffer, const void const *value) {
+DataBuffer* DataBuffer_append(DataBuffer *buffer, const void * const value) {
     assert(buffer != NULL);
     assert(value != NULL);
 

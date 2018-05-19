@@ -1,6 +1,7 @@
 /*********************************************************************
  * databuffer.h - generic databuffer                                 *
  * Written by Ben Perlin - 2018                                      *
+ * License: GNU GPL 3.0                                              *
  ********************************************************************/
 
 #ifndef __DATABUFFER_H__

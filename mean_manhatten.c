@@ -3,6 +3,7 @@
  * Takes a matrix of '1' and '0' in csv form with single trailing    *
  *    newline                                                        *
  * Written by Ben Perlin - 2018                                      *
+ * License: GNU GPL 3.0                                              *
  ********************************************************************/
 
 

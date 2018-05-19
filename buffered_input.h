@@ -1,6 +1,7 @@
 /*********************************************************************
  * buffered_input.h - buffered version of fgetc                      *
  * Written by Ben Perlin - 2018                                      *
+ * License: GNU GPL 3.0                                              *
  ********************************************************************/
 
 #ifndef __BUFFERED_FGETC_H__

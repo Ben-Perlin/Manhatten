@@ -1,6 +1,7 @@
 /*********************************************************************
  * Algorithmic logic to compute mean Manhatten distance of matrix    *
  * Written by Ben Perlin - 2018                                      *
+ * License: GNU GPL 3.0                                              *
  ********************************************************************/
 
 #ifndef __MEAN_MANHATTEN_H__
